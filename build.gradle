@@ -1,0 +1,22 @@
+subprojects {
+    apply plugin: 'java'
+
+    test {
+        // Disable the test report for the individual test task
+        reports.html.enabled = false
+
+    }
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+task testReport(type: TestReport) {
+    dependsOn subprojects*.test
+
+    destinationDir = file("$buildDir/reports/allTests")
+    // Include the results from the `test` task in all subprojects
+    reportOn subprojects*.test
+}
+
