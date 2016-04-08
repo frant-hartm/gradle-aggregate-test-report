@@ -13,10 +13,20 @@ subprojects {
 }
 
 task testReport(type: TestReport) {
-    dependsOn subprojects*.test
+    // make sure this task is run after all subproject test tasks
+    mustRunAfter subprojects*.test
 
     destinationDir = file("$buildDir/reports/allTests")
     // Include the results from the `test` task in all subprojects
     reportOn subprojects*.test
+}
+
+task test {
+    dependsOn subprojects*.test
+    finalizedBy 'testReport'
+}
+task build {
+    dependsOn subprojects*.build
+    dependsOn test
 }
 
